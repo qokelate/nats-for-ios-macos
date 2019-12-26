@@ -34,16 +34,16 @@ endif(NATS_BUILD_STREAMING)
 # Create the shared and static libraries
 # --------------------------------------
 if(NATS_BUILD_LIB_SHARED)
-  add_library(nats SHARED ${SOURCES} ${PS_SOURCES} ${S_SOURCES})
-  target_link_libraries(nats ${NATS_OPENSSL_LIBS} ${NATS_EXTRA_LIB} ${NATS_PROTOBUF_LIBRARIES} ${NATS_SODIUM_LIBRARIES})
+  add_library(nats SHARED ${SOURCES} ${PS_SOURCES} ${S_SOURCES} ${libPB.sources})
+  target_link_libraries(nats ${NATS_EXTRA_LIB} ${NATS_PROTOBUF_LIBRARIES} ${NATS_SODIUM_LIBRARIES} ${libOSSL.libs})
   set_target_properties(nats PROPERTIES
     VERSION ${NATS_VERSION_MAJOR}.${NATS_VERSION_MINOR}.${NATS_VERSION_PATCH}
     SOVERSION ${NATS_VERSION_MAJOR}.${NATS_VERSION_MINOR})
 endif(NATS_BUILD_LIB_SHARED)
 
 if(NATS_BUILD_LIB_STATIC)
-  add_library(nats_static STATIC ${SOURCES} ${PS_SOURCES} ${S_SOURCES})
-  target_link_libraries(nats_static ${NATS_OPENSSL_LIBS} ${NATS_PROTOBUF_LIBRARIES} ${NATS_SODIUM_LIBRARIES})
+  add_library(nats_static STATIC ${SOURCES} ${PS_SOURCES} ${S_SOURCES} ${libPB.sources})
+  target_link_libraries(nats_static ${NATS_PROTOBUF_LIBRARIES} ${NATS_SODIUM_LIBRARIES} ${libOSSL.libs})
   set_target_properties(nats_static PROPERTIES
     VERSION ${NATS_VERSION_MAJOR}.${NATS_VERSION_MINOR}.${NATS_VERSION_PATCH}
     SOVERSION ${NATS_VERSION_MAJOR}.${NATS_VERSION_MINOR})

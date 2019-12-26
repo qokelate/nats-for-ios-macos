@@ -1,6 +1,37 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(cnats)
+
+
+set(libNatsRepo.root "${CMAKE_CURRENT_LIST_DIR}/..")
+set(libNats.root "${CMAKE_CURRENT_LIST_DIR}")
+set(libPB.root "${libNatsRepo.root}/protobuf-c")
+set(libOSSL.root "${libNatsRepo.root}/openssl")
+
+set(libPB.sources
+        "${libPB.root}/protobuf-c/protobuf-c.c"
+        )
+
+include_directories(
+        "${libPB.root}"
+)
+
+set(libOSSL.libs
+        "${libOSSL.root}/macos/libssl.a"
+        "${libOSSL.root}/macos/libcrypto.a"
+        )
+
+if (${IOS})
+  set(libOSSL.libs
+          "${libOSSL.root}/iOS/libssl.a"
+          "${libOSSL.root}/iOS/libcrypto.a"
+          )
+  set(IOSSDK "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DIOS -arch arm64 -arch armv7s -arch armv7 -miphoneos-version-min=9.0 -isysroot '${IOSSDK}'")
+  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DIOS -arch arm64 -arch armv7s -arch armv7 -miphoneos-version-min=9.0 -isysroot '${IOSSDK}'")
+endif ()
+
+
 include(CTest)
 include(FindPackageHandleStandardArgs)
 
